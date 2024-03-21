@@ -8,11 +8,11 @@ public class VenueHireSystem {
   public VenueHireSystem() {}
 
   public void printVenues() {
-    // TODO implement this method
+    System.out.println(MessageCli.NO_VENUES);
   }
 
   public void createVenue(
-      String venueName, String venueCode, String capacityInput, String hireFeeInput) {
+    String venueName, String venueCode, String capacityInput, String hireFeeInput) {
     // TODO implement this method
   }
 
