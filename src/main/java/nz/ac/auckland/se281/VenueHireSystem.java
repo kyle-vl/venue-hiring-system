@@ -31,11 +31,13 @@ public class VenueHireSystem {
 
   public void createVenue(
     String venueName, String venueCode, String capacityInput, String hireFeeInput) {
+    // Checking for invalid venueName
     if (venueName == null || venueName.isEmpty()) {
       MessageCli.VENUE_NOT_CREATED_EMPTY_NAME.printMessage();
       return;
     }
 
+    // Checking for invalid capacityInput
     int capacity = 0;
     try {
       capacity = Integer.parseInt(capacityInput);
@@ -48,6 +50,7 @@ public class VenueHireSystem {
       return;
     }
 
+    // Checking for invalid hireFeeInput
     int hireFee = 0;
     try {
       hireFee = Integer.parseInt(hireFeeInput);
@@ -58,6 +61,14 @@ public class VenueHireSystem {
     } catch (NumberFormatException e) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
       return;
+    }
+
+    // Checking for invalid venueCode
+    for (VenueHireSystem venue : venues) {
+      if (venue.venueCode.equals(venueCode)) {
+        MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venueName);
+        return;
+      }
     }
 
     VenueHireSystem newVenue = new VenueHireSystem();
