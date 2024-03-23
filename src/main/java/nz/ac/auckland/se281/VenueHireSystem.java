@@ -23,6 +23,14 @@ public class VenueHireSystem {
       System.out.println(MessageCli.VENUE_NOT_CREATED_EMPTY_NAME);
       return;
     }
+
+    int capacity = 0;
+    capacity = Integer.parseInt(capacityInput);
+    if (capacity < 0)
+    {
+      System.out.println("Venue not created: capacity must be a positive number.");
+      return;
+    }
     this.venueName = venueName;
     this.venueCode = venueCode;
     this.capacityInput = capacityInput;
