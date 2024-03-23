@@ -19,20 +19,20 @@ public class VenueHireSystem {
     // Counting venues
     int venueCount = venues.size();
     if (venueCount == 0) {
-      System.out.println(MessageCli.NO_VENUES);
+      MessageCli.NO_VENUES.printMessage();
+      return;
     } countVenues(venueCount);
 
     // Listing venues
     for (VenueHireSystem venue : venues) {
-      System.out.println(venue.venueName + " (" + venue.venueCode + ") - " + 
-      venue.capacityInput + " people - $" + venue.hireFeeInput + " base hire fee");
+      MessageCli.VENUE_ENTRY.printMessage(venue.venueName, venue.venueCode, venue.capacityInput, venue.hireFeeInput);
     }
   }
 
   public void createVenue(
     String venueName, String venueCode, String capacityInput, String hireFeeInput) {
     if (venueName == null || venueName.isEmpty()) {
-      System.out.println(MessageCli.VENUE_NOT_CREATED_EMPTY_NAME);
+      MessageCli.VENUE_NOT_CREATED_EMPTY_NAME.printMessage();
       return;
     }
 
@@ -40,11 +40,11 @@ public class VenueHireSystem {
     try {
       capacity = Integer.parseInt(capacityInput);
       if (capacity < 0) {
-        System.out.println("Venue not created: capacity must be a positive number.");
+        MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", " positive");
         return;
       }
     } catch (NumberFormatException e) {
-      System.out.println("Venue not created: capacity must be a number.");
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", "");
       return;
     }
 
@@ -52,11 +52,11 @@ public class VenueHireSystem {
     try {
       hireFee = Integer.parseInt(hireFeeInput);
       if (hireFee < 0) {
-        System.out.println("Venue not created: hire fee must be a positive number.");
+        MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", " positive");
         return;
       }
     } catch (NumberFormatException e) {
-      System.out.println("Venue not created: hire fee must be a number.");
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
       return;
     }
 
@@ -66,41 +66,41 @@ public class VenueHireSystem {
     newVenue.capacityInput = capacityInput;
     newVenue.hireFeeInput = hireFeeInput;
     venues.add(newVenue);
-
-    System.out.println("Successfully created venue '" + venueName + "' (" + venueCode + ").");
+    MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
     }
 
   public void countVenues(int venueCount) {
+
     switch (venueCount) {
       case 1: 
-        System.out.println("There is one venue in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
         break;
       case 2:
-        System.out.println("There are two venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "two", "s");
         break;
       case 3:
-        System.out.println("There are three venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "three", "s");
         break;
       case 4:
-        System.out.println("There are four venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "four", "s");
         break;
       case 5:
-        System.out.println("There are five venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "five", "s");
         break;
       case 6:
-        System.out.println("There are six venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "six", "s");
         break;
       case 7:
-        System.out.println("There are seven venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "seven", "s");
         break;
       case 8:
-        System.out.println("There are eight venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "eight", "s");
         break;
       case 9:
-        System.out.println("There are nine venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", "nine", "s");
         break;
       default:
-        System.out.println("There are " + venueCount + " venues in the system:");
+        MessageCli.NUMBER_VENUES.printMessage("are", String.valueOf(venueCount), "s");
         }
   }
     
