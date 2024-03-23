@@ -16,16 +16,18 @@ public class VenueHireSystem {
   public VenueHireSystem() {}
 
   public void printVenues() {
+    // Counting venues
     int venueCount = venues.size();
     if (venueCount == 0) {
       System.out.println(MessageCli.NO_VENUES);
     } countVenues(venueCount);
 
+    // Listing venues
     for (VenueHireSystem venue : venues) {
       System.out.println(venue.venueName + " (" + venue.venueCode + ") - " + 
       venue.capacityInput + " people - $" + venue.hireFeeInput + " base hire fee");
     }
-    }
+  }
 
   public void createVenue(
     String venueName, String venueCode, String capacityInput, String hireFeeInput) {
@@ -58,11 +60,12 @@ public class VenueHireSystem {
       return;
     }
 
-    this.venueName = venueName;
-    this.venueCode = venueCode;
-    this.capacityInput = capacityInput;
-    this.hireFeeInput = hireFeeInput;
-    venues.add(this);
+    VenueHireSystem newVenue = new VenueHireSystem();
+    newVenue.venueName = venueName;
+    newVenue.venueCode = venueCode;
+    newVenue.capacityInput = capacityInput;
+    newVenue.hireFeeInput = hireFeeInput;
+    venues.add(newVenue);
 
     System.out.println("Successfully created venue '" + venueName + "' (" + venueCode + ").");
     }
