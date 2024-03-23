@@ -18,19 +18,35 @@ public class VenueHireSystem {
 
   public void createVenue(
     String venueName, String venueCode, String capacityInput, String hireFeeInput) {
-    if (venueName == null || venueName.isEmpty())
-    {
+    if (venueName == null || venueName.isEmpty()) {
       System.out.println(MessageCli.VENUE_NOT_CREATED_EMPTY_NAME);
       return;
     }
 
     int capacity = 0;
-    capacity = Integer.parseInt(capacityInput);
-    if (capacity < 0)
-    {
-      System.out.println("Venue not created: capacity must be a positive number.");
+    try {
+      capacity = Integer.parseInt(capacityInput);
+      if (capacity < 0) {
+        System.out.println("Venue not created: capacity must be a positive number.");
+        return;
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("Venue not created: capacity must be a number.");
       return;
     }
+
+    int hireFee = 0;
+    try {
+      hireFee = Integer.parseInt(hireFeeInput);
+      if (hireFee < 0) {
+        System.out.println("Venue not created: hire fee must be a positive number.");
+        return;
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("Venue not created: hire fee must be a number.");
+      return;
+    }
+
     this.venueName = venueName;
     this.venueCode = venueCode;
     this.capacityInput = capacityInput;
