@@ -126,6 +126,14 @@ public class VenueHireSystem {
   }
 
   public void makeBooking(String[] options) {
+    // Get individual strings from options 
+    String code = options[0];
+    String date = options[1];
+    String email = options[2];
+    String attendees = options[3];
+    String name = null;
+
+    // Check system date and venues list
     if (systemDate == null || systemDate.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
       return;
@@ -135,7 +143,22 @@ public class VenueHireSystem {
       MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
       return;
     }
+
+    // Use venue code to find venue name
+    for (Venue venue : venues) {
+      if (venue.getCode().equals(code)) {
+        name = venue.getName();
+        break;
+      }
+    }
+
+    // Create booking
+    if (name != null) {
+      String reference = BookingReferenceGenerator.generateBookingReference();
+      MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(reference, name, date, attendees);
+    }
   }
+
 
   public void printBookings(String venueCode) {
     // TODO implement this method
