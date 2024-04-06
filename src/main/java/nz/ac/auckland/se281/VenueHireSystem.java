@@ -7,11 +7,7 @@ import nz.ac.auckland.se281.Types.FloralType;
 
 public class VenueHireSystem {
   
-  private String venueName;
-  private String venueCode;
-  private String capacityInput;
-  private String hireFeeInput;
-  private ArrayList<VenueHireSystem> venues = new ArrayList<>();
+  private ArrayList<Venue> venues = new ArrayList<>();
 
   public VenueHireSystem() {}
 
@@ -24,8 +20,12 @@ public class VenueHireSystem {
     } countVenues(venueCount);
 
     // Listing venues
-    for (VenueHireSystem venue : venues) {
-      MessageCli.VENUE_ENTRY.printMessage(venue.venueName, venue.venueCode, venue.capacityInput, venue.hireFeeInput);
+    for (Venue venue : venues) {
+      String name = venue.getName();
+      String code = venue.getCode();
+      String capacity = venue.getCapacity();
+      String hireFee = venue.getHireFee();
+      MessageCli.VENUE_ENTRY.printMessage(name, code, capacity, hireFee);
     }
   }
 
@@ -45,7 +45,7 @@ public class VenueHireSystem {
         MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", " positive");
         return;
       }
-    } catch (NumberFormatException e) {
+    } catch (NumberFormatException nfe) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", "");
       return;
     }
@@ -58,24 +58,20 @@ public class VenueHireSystem {
         MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", " positive");
         return;
       }
-    } catch (NumberFormatException e) {
+    } catch (NumberFormatException nfe) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
       return;
     }
 
     // Checking for invalid venueCode
-    for (VenueHireSystem venue : venues) {
-      if (venue.venueCode.equals(venueCode)) {
+    for (Venue venue : venues) {
+      if (venue.getCode().equals(venueCode)) {
         MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venueName);
         return;
       }
     }
 
-    VenueHireSystem newVenue = new VenueHireSystem();
-    newVenue.venueName = venueName;
-    newVenue.venueCode = venueCode;
-    newVenue.capacityInput = capacityInput;
-    newVenue.hireFeeInput = hireFeeInput;
+    Venue newVenue = new Venue(venueName, venueCode, capacityInput, hireFeeInput);
     venues.add(newVenue);
     MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
     }
@@ -116,11 +112,9 @@ public class VenueHireSystem {
   }
     
   public void setSystemDate(String dateInput) {
-    // TODO implement this method
   }
 
   public void printSystemDate() {
-    // TODO implement this method
   }
 
   public void makeBooking(String[] options) {
