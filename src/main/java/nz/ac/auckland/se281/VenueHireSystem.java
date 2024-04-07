@@ -239,15 +239,32 @@ public class VenueHireSystem {
     
     // Find venue
     boolean venueFound = false;
+    boolean booked = false;
+    String venueSelected = null;
     for (Venue venue : venues) {
       if (venue.getCode().equals(venueCode)) {
         venueFound = true;
+        venueSelected = venue.getName();
+        break;
       }
     }
 
-    if (venueFound == false) {
+    if (venueFound == false && venueSelected == null) {
       MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
       return;
+    }
+    
+    MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueSelected);
+
+    for (Booking booking : bookings) {
+      if (booking.getCode().equals(venueCode)) {
+        booked = true;
+        MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(venueSelected, booking.getDate());
+      }
+    }
+
+    if (booked == false) {
+      MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueSelected);
     }
   }
 
