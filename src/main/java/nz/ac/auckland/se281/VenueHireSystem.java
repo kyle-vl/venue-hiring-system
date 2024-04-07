@@ -21,13 +21,18 @@ public class VenueHireSystem {
       return;
     } countVenues(venueCount);
 
+    String[] dateParts = systemDate.split("/");
+    String day = dateParts[0];
+    String month = dateParts[1];
+    String year = dateParts[2];
+
     // Listing venues
     for (Venue venue : venues) {
       String name = venue.getName();
       String code = venue.getCode();
       String capacity = venue.getCapacity();
       String hireFee = venue.getHireFee();
-      MessageCli.VENUE_ENTRY.printMessage(name, code, capacity, hireFee);
+      MessageCli.VENUE_ENTRY.printMessage(name, code, capacity, hireFee, systemDate);
     }
   }
 
