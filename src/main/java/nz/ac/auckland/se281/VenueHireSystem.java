@@ -134,7 +134,7 @@ public class VenueHireSystem {
     String attendees = options[3];
     String name = null;
 
-    // Check system date and venues list
+    // Check system date, venues list, and attendees
     if (systemDate == null || systemDate.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
       return;
@@ -145,16 +145,39 @@ public class VenueHireSystem {
       return;
     }
 
+    int attendeesInt = 0;
+    int capacityInt = 0;
+    try {
+      attendeesInt = Integer.parseInt(attendees);
+    } catch (NumberFormatException nfe) {
+      System.out.println("Booking not made: attendees must be a number.");
+      return;
+    }
+
     // Use venue code to find venue name
     boolean venueFound = false;
+    int attendeesFixed = 0;
     for (Venue venue : venues) {
       if (venue.getCode().equals(code)) {
         name = venue.getName();
         venueFound = true;
+        capacityInt = Integer.parseInt(venue.getCapacity());
+        if (capacityInt / 4 > attendeesInt) {
+          attendeesFixed = capacityInt / 4;
+          MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(attendees, String.valueOf(attendeesFixed), venue.getCapacity());
+          attendees = String.valueOf(attendeesFixed);
+        }
         break;
       }
     }
 
+    // Venue not found
+    if (venueFound = false) {
+      MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(code);
+      return;
+    }
+    
+    // Checks if venue is already booked
     for (Booking booking : bookings) {
       if (booking.getName().equals(name) && booking.getDate().equals(date))
       {
@@ -164,10 +187,6 @@ public class VenueHireSystem {
     }
 
     // Create booking
-    if (venueFound = false) {
-      MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(code);
-    }
-
     if (name != null) {
       String reference = BookingReferenceGenerator.generateBookingReference();
       Booking newBooking = new Booking(name, date);
