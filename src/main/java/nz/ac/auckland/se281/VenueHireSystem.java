@@ -9,6 +9,7 @@ public class VenueHireSystem {
   
   String systemDate;
   private ArrayList<Venue> venues = new ArrayList<>();
+  private ArrayList<Booking> bookings = new ArrayList<>();
 
   public VenueHireSystem() {}
 
@@ -152,9 +153,19 @@ public class VenueHireSystem {
       }
     }
 
+    for (Booking booking : bookings) {
+      if (booking.getName().equals(name) && booking.getDate().equals(date))
+      {
+        MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(name, date);
+        return;
+      }
+    }
+
     // Create booking
     if (name != null) {
       String reference = BookingReferenceGenerator.generateBookingReference();
+      Booking newBooking = new Booking(name, date);
+      bookings.add(newBooking);
       MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(reference, name, date, attendees);
     }
   }
