@@ -228,7 +228,7 @@ public class VenueHireSystem {
     // Create booking
     if (name != null) {
       String reference = BookingReferenceGenerator.generateBookingReference();
-      Booking newBooking = new Booking(name, date, code);
+      Booking newBooking = new Booking(name, date, code, reference);
       bookings.add(newBooking);
       MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(reference, name, date, attendees);
     }
@@ -259,7 +259,7 @@ public class VenueHireSystem {
     for (Booking booking : bookings) {
       if (booking.getCode().equals(venueCode)) {
         booked = true;
-        MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(venueSelected, booking.getDate());
+        MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(booking.getReference(), booking.getDate());
       }
     }
 
