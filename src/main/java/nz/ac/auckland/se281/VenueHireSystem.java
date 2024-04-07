@@ -157,15 +157,24 @@ public class VenueHireSystem {
     // Use venue code to find venue name
     boolean venueFound = false;
     int attendeesFixed = 0;
+
     for (Venue venue : venues) {
       if (venue.getCode().equals(code)) {
         name = venue.getName();
         venueFound = true;
+        String capacity = venue.getCapacity();
         capacityInt = Integer.parseInt(venue.getCapacity());
         if (capacityInt / 4 > attendeesInt) {
           attendeesFixed = capacityInt / 4;
-          MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(attendees, String.valueOf(attendeesFixed), venue.getCapacity());
+          String attendeesOld = attendees;
           attendees = String.valueOf(attendeesFixed);
+          MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(attendeesOld, attendees, capacity);
+        }
+        if (attendeesInt > capacityInt) {
+          attendeesFixed = capacityInt;
+          String attendeesOld = attendees;
+          attendees = String.valueOf(attendeesFixed);
+          MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(attendeesOld, attendees, capacity);
         }
         break;
       }
