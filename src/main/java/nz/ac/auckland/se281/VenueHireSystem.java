@@ -21,18 +21,14 @@ public class VenueHireSystem {
       return;
     } countVenues(venueCount);
 
-    String[] dateParts = systemDate.split("/");
-    String day = dateParts[0];
-    String month = dateParts[1];
-    String year = dateParts[2];
-
     // Listing venues
     for (Venue venue : venues) {
       String name = venue.getName();
       String code = venue.getCode();
       String capacity = venue.getCapacity();
       String hireFee = venue.getHireFee();
-      MessageCli.VENUE_ENTRY.printMessage(name, code, capacity, hireFee, systemDate);
+      String nextAvailable = venue.getNextAvailable();
+      MessageCli.VENUE_ENTRY.printMessage(name, code, capacity, hireFee, nextAvailable);
     }
   }
 
@@ -120,7 +116,10 @@ public class VenueHireSystem {
     
   public void setSystemDate(String dateInput) {
     systemDate = dateInput;
-    MessageCli.DATE_SET.printMessage(dateInput);
+    for (Venue venue : venues) {
+      venue.setNextAvailable(systemDate);
+    }
+    MessageCli.DATE_SET.printMessage(systemDate);
   }
 
   public void printSystemDate() {
@@ -168,6 +167,30 @@ public class VenueHireSystem {
         name = venue.getName();
         venueFound = true;
         String capacity = venue.getCapacity();
+        
+        String[] systemDateParts = systemDate.split("/");
+        int systemDay = Integer.parseInt(systemDateParts[0]);
+
+        String[] bookingDateParts = date.split("/");
+        int bookingDay = Integer.parseInt(bookingDateParts[0]);
+
+        int nextAvailableDayInt = systemDay;
+
+        while (bookingDay > systemDay) {
+          nextAvailableDayInt++;
+          systemDay++;
+        }
+        nextAvailableDayInt++;
+
+        String nextAvailableDay = String.valueOf(nextAvailableDayInt);
+        if (nextAvailableDay.length() == 1) {
+          nextAvailableDay = "0" + nextAvailableDay;
+        }
+        String nextAvailable = nextAvailableDay + "/" + systemDateParts[1] + "/" + systemDateParts[2];
+
+        venue.setNextAvailable(nextAvailable); 
+
+        // Adjust attendees count if not valid
         capacityInt = Integer.parseInt(venue.getCapacity());
         if (capacityInt / 4 > attendeesInt) {
           attendeesFixed = capacityInt / 4;
