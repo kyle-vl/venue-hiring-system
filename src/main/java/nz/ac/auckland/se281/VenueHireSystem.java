@@ -168,6 +168,8 @@ public class VenueHireSystem {
         venueFound = true;
         String capacity = venue.getCapacity();
         
+        /* Note to self: this is very messy and needs a rework! 
+        Also needs to check month and year! */
         String[] systemDateParts = systemDate.split("/");
         int systemDay = Integer.parseInt(systemDateParts[0]);
 
@@ -226,7 +228,7 @@ public class VenueHireSystem {
     // Create booking
     if (name != null) {
       String reference = BookingReferenceGenerator.generateBookingReference();
-      Booking newBooking = new Booking(name, date);
+      Booking newBooking = new Booking(name, date, code);
       bookings.add(newBooking);
       MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(reference, name, date, attendees);
     }
@@ -234,7 +236,19 @@ public class VenueHireSystem {
 
 
   public void printBookings(String venueCode) {
-    // TODO implement this method
+    
+    // Find venue
+    boolean venueFound = false;
+    for (Venue venue : venues) {
+      if (venue.getCode().equals(venueCode)) {
+        venueFound = true;
+      }
+    }
+
+    if (venueFound == false) {
+      MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
+      return;
+    }
   }
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
