@@ -146,9 +146,11 @@ public class VenueHireSystem {
     }
 
     // Use venue code to find venue name
+    boolean venueFound = false;
     for (Venue venue : venues) {
       if (venue.getCode().equals(code)) {
         name = venue.getName();
+        venueFound = true;
         break;
       }
     }
@@ -162,6 +164,10 @@ public class VenueHireSystem {
     }
 
     // Create booking
+    if (venueFound = false) {
+      MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(code);
+    }
+
     if (name != null) {
       String reference = BookingReferenceGenerator.generateBookingReference();
       Booking newBooking = new Booking(name, date);
