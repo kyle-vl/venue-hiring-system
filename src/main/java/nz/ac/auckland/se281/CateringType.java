@@ -1,11 +1,11 @@
 package nz.ac.auckland.se281;
 
-public abstract class Catering {
-    private String bookingReference;
-    private String type;
-    private int price;
+public abstract class CateringType {
+    protected String bookingReference;
+    protected String type;
+    protected int price;
 
-    public Catering (String bookingReference, String type, int price) {
+    public CateringType (String bookingReference, String type, int price) {
         this.bookingReference = bookingReference;
         this.type = type;
         this.price = price;

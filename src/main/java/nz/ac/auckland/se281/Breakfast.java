@@ -1,6 +1,6 @@
 package nz.ac.auckland.se281;
 
-public class Breakfast extends Catering {
+public class Breakfast extends CateringType {
 
     public Breakfast(String bookingReference) {
         super(bookingReference, "Breakfast", 15);
