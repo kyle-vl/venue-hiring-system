@@ -5,13 +5,15 @@ public class Booking {
   private String date;
   private String code;
   private String reference;
+  private String attendees;
   private boolean hasMusic;
 
-  public Booking(String name, String date, String code, String reference) {
+  public Booking(String name, String date, String code, String reference, String attendees) {
     this.name = name;
     this.date = date;
     this.code = code;
     this.reference = reference;
+    this.attendees = attendees;
     this.hasMusic = false;
   }
 
@@ -29,6 +31,10 @@ public class Booking {
 
   public String getReference() {
     return reference;
+  }
+
+  public String getAttendees() {
+    return attendees;
   }
 
   public void setHasMusic(boolean hasMusic) {

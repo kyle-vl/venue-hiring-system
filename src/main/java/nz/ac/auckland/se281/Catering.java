@@ -9,4 +9,14 @@ public class Catering extends Service {
   public void displayMessage(String bookingReference) {
     MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Catering (" + type + ")", bookingReference);
   }
+
+  public void viewInvoice(String bookingReference, String attendees) {
+    int attendeesInt = Integer.parseInt(attendees);
+    int totalPrice = price * attendeesInt;
+    MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(type, String.valueOf(totalPrice));
+  }
+
+  public String getReference() {
+    return bookingReference;
+  }
 }

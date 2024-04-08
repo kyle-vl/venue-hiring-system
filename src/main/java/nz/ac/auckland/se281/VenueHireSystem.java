@@ -9,6 +9,7 @@ public class VenueHireSystem {
   private String systemDate;
   private ArrayList<Venue> venues = new ArrayList<>();
   private ArrayList<Booking> bookings = new ArrayList<>();
+  private ArrayList<Catering> caterings = new ArrayList<>();
 
   public VenueHireSystem() {}
 
@@ -227,7 +228,7 @@ public class VenueHireSystem {
     // Create booking
     if (name != null) {
       String reference = BookingReferenceGenerator.generateBookingReference();
-      Booking newBooking = new Booking(name, date, code, reference);
+      Booking newBooking = new Booking(name, date, code, reference, attendees);
       bookings.add(newBooking);
       MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(reference, name, date, attendees);
     }
@@ -272,6 +273,7 @@ public class VenueHireSystem {
         String cateringTypeName = cateringType.getName();
         int cateringTypeCost = cateringType.getCostPerPerson();
         Catering newCatering = new Catering(bookingReference, cateringTypeName, cateringTypeCost);
+        caterings.add(newCatering);
         newCatering.displayMessage(bookingReference);
         return;
         }
@@ -297,6 +299,24 @@ public class VenueHireSystem {
   }
 
   public void viewInvoice(String bookingReference) {
-    // TODO implement this method
+    String attendees = null;
+    
+    for (Booking booking : bookings) {
+      if (booking.getReference().equals(bookingReference)) {
+        attendees = booking.getAttendees();
+        break;
+      }
+    }
+
+    if (attendees == null) {
+      return;
+    }
+
+    for (Catering catering : caterings) {
+      if (catering.getReference().equals(bookingReference)) {
+        catering.viewInvoice(bookingReference, attendees);
+        return;
+      }
+    }
   }
 }

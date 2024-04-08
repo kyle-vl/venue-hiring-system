@@ -12,4 +12,5 @@ public abstract class Service {
   }
 
   public abstract void displayMessage(String bookingReference);
+  public abstract void viewInvoice(String bookingReference, String attendees);
 }
