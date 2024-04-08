@@ -12,5 +12,10 @@ public abstract class Service {
   }
 
   public abstract void displayMessage(String bookingReference);
+
   public abstract int viewInvoice(String bookingReference, String attendees);
+
+  public String getReference() {
+    return bookingReference;
+  }
 }

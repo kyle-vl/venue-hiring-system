@@ -278,8 +278,8 @@ public class VenueHireSystem {
         newCatering.displayMessage(bookingReference);
         caterings.add(newCatering);
         return;
-        }
       }
+    }
     MessageCli.SERVICE_NOT_ADDED_BOOKING_NOT_FOUND.printMessage("Catering", bookingReference);
     return;
   }
@@ -308,7 +308,7 @@ public class VenueHireSystem {
     int totalCost = 0;
     int cateringCost = 0;
     int musicCost = 0;
-    
+
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
         attendees = booking.getAttendees();
@@ -318,6 +318,7 @@ public class VenueHireSystem {
     }
 
     if (attendees == null || bookingCode == null) {
+      MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
       return;
     }
 
@@ -337,7 +338,7 @@ public class VenueHireSystem {
       }
     }
 
-    for (Music music: musics) {
+    for (Music music : musics) {
       if (music.getReference().equals(bookingReference)) {
         musicCost = music.viewInvoice(bookingReference, attendees);
         totalCost += musicCost;
