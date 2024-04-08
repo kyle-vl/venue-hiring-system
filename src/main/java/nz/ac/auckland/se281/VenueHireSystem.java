@@ -11,6 +11,7 @@ public class VenueHireSystem {
   private ArrayList<Booking> bookings = new ArrayList<>();
   private ArrayList<Catering> caterings = new ArrayList<>();
   private ArrayList<Music> musics = new ArrayList<>();
+  private ArrayList<Floral> florals = new ArrayList<>();
 
   public VenueHireSystem() {}
 
@@ -273,7 +274,7 @@ public class VenueHireSystem {
     // Find booking using reference
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
-        // If booking found, add catering
+        // If booking found, add catering chosen by user
         String cateringTypeName = cateringType.getName();
         int cateringTypeCost = cateringType.getCostPerPerson();
 
@@ -303,7 +304,21 @@ public class VenueHireSystem {
   }
 
   public void addServiceFloral(String bookingReference, FloralType floralType) {
-    // TODO implement this method
+    // Find booking using reference
+    for (Booking booking : bookings) {
+      if (booking.getReference().equals(bookingReference)) {
+        // If booking found, add floral chosen by user
+        String floralTypeName = floralType.getName();
+        int floralTypeCost = floralType.getCost();
+
+        Floral newFloral = new Floral(bookingReference, floralTypeName, floralTypeCost);
+        newFloral.displayMessage(bookingReference);
+        florals.add(newFloral);
+        return;
+      }
+    }
+    MessageCli.SERVICE_NOT_ADDED_BOOKING_NOT_FOUND.printMessage("Floral", bookingReference);
+    return;
   }
 
   public void viewInvoice(String bookingReference) {
@@ -312,6 +327,7 @@ public class VenueHireSystem {
     int totalCost = 0;
     int cateringCost = 0;
     int musicCost = 0;
+    int floralCost = 0;
 
     // Find booking using reference
     for (Booking booking : bookings) {
@@ -354,7 +370,16 @@ public class VenueHireSystem {
         break;
       }
     }
-    
+
+    // Check for music for booking
+    for (Floral floral : florals) {
+      if (floral.getReference().equals(bookingReference)) {
+        floralCost = floral.viewInvoice(bookingReference, attendees);
+        totalCost += floralCost;
+        break;
+      }
+    }
+
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalCost));
   }
 }
