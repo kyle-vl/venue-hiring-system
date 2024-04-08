@@ -269,9 +269,12 @@ public class VenueHireSystem {
   public void addCateringService(String bookingReference, CateringType cateringType) {
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
+        switch (cateringType) {
+          case BREAKFAST:
           Breakfast newCatering = new Breakfast(bookingReference);
           newCatering.displayMessage(bookingReference);
           return;
+        }
       }
     }
     MessageCli.SERVICE_NOT_ADDED_BOOKING_NOT_FOUND.printMessage("Catering", bookingReference);
