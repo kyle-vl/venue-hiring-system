@@ -11,7 +11,7 @@ public class VenueHireSystem {
   private ArrayList<Booking> bookings = new ArrayList<>();
   private ArrayList<Catering> caterings = new ArrayList<>();
   private ArrayList<Music> musics = new ArrayList<>();
-  private ArrayList<Floral> florals = new ArrayList<>();
+  private ArrayList<Florist> florists = new ArrayList<>();
 
   public VenueHireSystem() {}
 
@@ -308,12 +308,12 @@ public class VenueHireSystem {
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
         // If booking found, add floral chosen by user
-        String floralTypeName = floralType.getName();
-        int floralTypeCost = floralType.getCost();
+        String floristTypeName = floralType.getName();
+        int floristTypeCost = floralType.getCost();
 
-        Floral newFloral = new Floral(bookingReference, floralTypeName, floralTypeCost);
-        newFloral.displayMessage(bookingReference);
-        florals.add(newFloral);
+        Florist newFlorist = new Florist(bookingReference, floristTypeName, floristTypeCost);
+        newFlorist.displayMessage(bookingReference);
+        florists.add(newFlorist);
         return;
       }
     }
@@ -329,7 +329,7 @@ public class VenueHireSystem {
     int totalCost = 0;
     int cateringCost = 0;
     int musicCost = 0;
-    int floralCost = 0;
+    int floristCost = 0;
 
     // Find booking using reference
     for (Booking booking : bookings) {
@@ -353,11 +353,13 @@ public class VenueHireSystem {
       if (venue.getCode().equals(bookingCode)) {
         int hireFeeInt = Integer.parseInt(venue.getHireFee());
         totalCost += hireFeeInt;
-        MessageCli.INVOICE_CONTENT_VENUE_FEE.printMessage(venue.getHireFee());
 
         // Print top half of invoice, with booking details
         MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage(
             bookingReference, email, systemDate, partyDate, attendees, venue.getName());
+
+        // Print venue fee
+        MessageCli.INVOICE_CONTENT_VENUE_FEE.printMessage(venue.getHireFee());
         break;
       }
     }
@@ -381,10 +383,10 @@ public class VenueHireSystem {
     }
 
     // Find floral costs for booking
-    for (Floral floral : florals) {
-      if (floral.getReference().equals(bookingReference)) {
-        floralCost = floral.viewInvoice(bookingReference, attendees);
-        totalCost += floralCost;
+    for (Florist florist : florists) {
+      if (florist.getReference().equals(bookingReference)) {
+        floristCost = florist.viewInvoice(bookingReference, attendees);
+        totalCost += floristCost;
         break;
       }
     }
