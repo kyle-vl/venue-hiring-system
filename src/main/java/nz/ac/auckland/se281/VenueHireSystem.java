@@ -231,7 +231,7 @@ public class VenueHireSystem {
     // Create booking
     if (name != null) {
       String reference = BookingReferenceGenerator.generateBookingReference();
-      Booking newBooking = new Booking(name, date, code, reference, attendees);
+      Booking newBooking = new Booking(name, date, code, reference, attendees, email);
       bookings.add(newBooking);
       MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(reference, name, date, attendees);
     }
@@ -324,6 +324,8 @@ public class VenueHireSystem {
   public void viewInvoice(String bookingReference) {
     String attendees = null;
     String bookingCode = null;
+    String email = null;
+    String partyDate = null;
     int totalCost = 0;
     int cateringCost = 0;
     int musicCost = 0;
@@ -334,12 +336,14 @@ public class VenueHireSystem {
       if (booking.getReference().equals(bookingReference)) {
         attendees = booking.getAttendees();
         bookingCode = booking.getCode();
+        email = booking.getEmail();
+        partyDate = booking.getDate();
         break;
       }
     }
 
     // If booking not found, return
-    if (attendees == null || bookingCode == null) {
+    if (attendees == null || bookingCode == null || email == null || partyDate == null) {
       MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
       return;
     }
@@ -349,6 +353,10 @@ public class VenueHireSystem {
       if (venue.getCode().equals(bookingCode)) {
         int hireFeeInt = Integer.parseInt(venue.getHireFee());
         totalCost += hireFeeInt;
+
+        // Print top half of invoice, with booking details
+        MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage(
+            bookingReference, email, systemDate, partyDate, attendees, venue.getName());
         break;
       }
     }
@@ -371,7 +379,7 @@ public class VenueHireSystem {
       }
     }
 
-    // Check for music for booking
+    // Find floral costs for booking
     for (Floral floral : florals) {
       if (floral.getReference().equals(bookingReference)) {
         floralCost = floral.viewInvoice(bookingReference, attendees);
@@ -380,6 +388,7 @@ public class VenueHireSystem {
       }
     }
 
+    // Print bottom half of invoice, with total cost
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalCost));
   }
 }
