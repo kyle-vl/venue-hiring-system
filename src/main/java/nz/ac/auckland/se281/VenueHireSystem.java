@@ -353,6 +353,7 @@ public class VenueHireSystem {
       if (venue.getCode().equals(bookingCode)) {
         int hireFeeInt = Integer.parseInt(venue.getHireFee());
         totalCost += hireFeeInt;
+        MessageCli.INVOICE_CONTENT_VENUE_FEE.printMessage(venue.getHireFee());
 
         // Print top half of invoice, with booking details
         MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage(
