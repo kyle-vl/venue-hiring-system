@@ -304,35 +304,47 @@ public class VenueHireSystem {
 
   public void viewInvoice(String bookingReference) {
     String attendees = null;
+    String bookingCode = null;
+    int totalCost = 0;
     int cateringCost = 0;
     int musicCost = 0;
     
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
         attendees = booking.getAttendees();
+        bookingCode = booking.getCode();
         break;
       }
     }
 
-    if (attendees == null) {
+    if (attendees == null || bookingCode == null) {
       return;
+    }
+
+    for (Venue venue : venues) {
+      if (venue.getCode().equals(bookingCode)) {
+        int hireFeeInt = Integer.parseInt(venue.getHireFee());
+        totalCost += hireFeeInt;
+        break;
+      }
     }
 
     for (Catering catering : caterings) {
       if (catering.getReference().equals(bookingReference)) {
         cateringCost = catering.viewInvoice(bookingReference, attendees);
-        return;
+        totalCost += cateringCost;
+        break;
       }
     }
 
     for (Music music: musics) {
       if (music.getReference().equals(bookingReference)) {
         musicCost = music.viewInvoice(bookingReference, attendees);
-        return;
+        totalCost += musicCost;
+        break;
       }
     }
 
-    int totalCost = cateringCost + musicCost;
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalCost));
   }
 }
