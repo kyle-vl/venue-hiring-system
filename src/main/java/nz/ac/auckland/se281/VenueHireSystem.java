@@ -1,12 +1,11 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
-
 import nz.ac.auckland.se281.Types.CateringType;
 import nz.ac.auckland.se281.Types.FloralType;
 
 public class VenueHireSystem {
-  
+
   String systemDate;
   private ArrayList<Venue> venues = new ArrayList<>();
   private ArrayList<Booking> bookings = new ArrayList<>();
@@ -19,7 +18,8 @@ public class VenueHireSystem {
     if (venueCount == 0) {
       MessageCli.NO_VENUES.printMessage();
       return;
-    } countVenues(venueCount);
+    }
+    countVenues(venueCount);
 
     // Listing venues
     for (Venue venue : venues) {
@@ -33,7 +33,7 @@ public class VenueHireSystem {
   }
 
   public void createVenue(
-    String venueName, String venueCode, String capacityInput, String hireFeeInput) {
+      String venueName, String venueCode, String capacityInput, String hireFeeInput) {
     // Checking for invalid venueName
     if (venueName == null || venueName.isEmpty()) {
       MessageCli.VENUE_NOT_CREATED_EMPTY_NAME.printMessage();
@@ -69,20 +69,20 @@ public class VenueHireSystem {
     // Checking for invalid venueCode
     for (Venue venue : venues) {
       if (venue.getCode().equals(venueCode)) {
-        MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venueName);
+        MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venue.getName());
         return;
       }
     }
 
-    Venue newVenue = new Venue(venueName, venueCode, capacityInput, hireFeeInput);
+    Venue newVenue = new Venue(venueName, venueCode, capacityInput, hireFeeInput, "%s");
     venues.add(newVenue);
     MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
-    }
+  }
 
   public void countVenues(int venueCount) {
 
     switch (venueCount) {
-      case 1: 
+      case 1:
         MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
         break;
       case 2:
@@ -111,9 +111,9 @@ public class VenueHireSystem {
         break;
       default:
         MessageCli.NUMBER_VENUES.printMessage("are", String.valueOf(venueCount), "s");
-        }
+    }
   }
-    
+
   public void setSystemDate(String dateInput) {
     systemDate = dateInput;
     for (Venue venue : venues) {
@@ -131,7 +131,7 @@ public class VenueHireSystem {
   }
 
   public void makeBooking(String[] options) {
-    // Get individual strings from options 
+    // Get individual strings from options
     String code = options[0];
     String date = options[1];
     String email = options[2];
@@ -167,8 +167,8 @@ public class VenueHireSystem {
         name = venue.getName();
         venueFound = true;
         String capacity = venue.getCapacity();
-        
-        /* Note to self: this is very messy and needs a rework! 
+
+        /* Note to self: this is very messy and needs a rework!
         Also needs to check month and year! */
         String[] systemDateParts = systemDate.split("/");
         int systemDay = Integer.parseInt(systemDateParts[0]);
@@ -188,9 +188,10 @@ public class VenueHireSystem {
         if (nextAvailableDay.length() == 1) {
           nextAvailableDay = "0" + nextAvailableDay;
         }
-        String nextAvailable = nextAvailableDay + "/" + systemDateParts[1] + "/" + systemDateParts[2];
+        String nextAvailable =
+            nextAvailableDay + "/" + systemDateParts[1] + "/" + systemDateParts[2];
 
-        venue.setNextAvailable(nextAvailable); 
+        venue.setNextAvailable(nextAvailable);
 
         // Adjust attendees count if not valid
         capacityInt = Integer.parseInt(venue.getCapacity());
@@ -215,11 +216,10 @@ public class VenueHireSystem {
       MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(code);
       return;
     }
-    
+
     // Checks if venue is already booked
     for (Booking booking : bookings) {
-      if (booking.getName().equals(name) && booking.getDate().equals(date))
-      {
+      if (booking.getName().equals(name) && booking.getDate().equals(date)) {
         MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(name, date);
         return;
       }
@@ -234,9 +234,8 @@ public class VenueHireSystem {
     }
   }
 
-
   public void printBookings(String venueCode) {
-    
+
     // Find venue
     boolean venueFound = false;
     boolean booked = false;
@@ -253,7 +252,7 @@ public class VenueHireSystem {
       MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
       return;
     }
-    
+
     MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueSelected);
 
     for (Booking booking : bookings) {

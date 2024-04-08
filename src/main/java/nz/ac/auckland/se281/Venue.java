@@ -7,11 +7,12 @@ public class Venue {
     private String hireFee;
     private String nextAvailable;
 
-    public Venue(String name, String code, String capacity, String hireFee) {
+    public Venue(String name, String code, String capacity, String hireFee, String nextAvailable) {
         this.name = name;
         this.code = code;
         this.capacity = capacity;
         this.hireFee = hireFee;
+        this.nextAvailable = nextAvailable;
     }
 
     public String getName() {
