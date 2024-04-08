@@ -1,15 +1,12 @@
 package nz.ac.auckland.se281;
 
-public abstract class Catering {
-  protected String bookingReference;
-  protected String type;
-  protected int price;
+public class Catering extends Service {
 
   public Catering(String bookingReference, String type, int price) {
-    this.bookingReference = bookingReference;
-    this.type = type;
-    this.price = price;
+    super(bookingReference, type, price);
   }
 
-  public abstract void displayMessage(String bookingReference);
+  public void displayMessage(String bookingReference) {
+    MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Catering (" + type + ")", bookingReference);
+  }
 }
