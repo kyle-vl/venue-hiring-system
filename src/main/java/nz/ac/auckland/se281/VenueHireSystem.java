@@ -83,7 +83,7 @@ public class VenueHireSystem {
 
   public void displayVenueCount(int venueCount) {
 
-    // Should print the number as a word if less than 10 venues, otherwise print digits
+    // Should print the number as a word if less than 10 venues
     switch (venueCount) {
       case 1:
         MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
@@ -112,6 +112,7 @@ public class VenueHireSystem {
       case 9:
         MessageCli.NUMBER_VENUES.printMessage("are", "nine", "s");
         break;
+        // If more than 10 venues, print digits
       default:
         MessageCli.NUMBER_VENUES.printMessage("are", String.valueOf(venueCount), "s");
     }
@@ -269,8 +270,10 @@ public class VenueHireSystem {
   }
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
+    // Find booking using reference
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
+        // If booking found, add catering
         String cateringTypeName = cateringType.getName();
         int cateringTypeCost = cateringType.getCostPerPerson();
 
@@ -285,9 +288,10 @@ public class VenueHireSystem {
   }
 
   public void addServiceMusic(String bookingReference) {
+    // Find booking using reference
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
-
+        // If booking found, add music
         Music newMusic = new Music(bookingReference);
         newMusic.displayMessage(bookingReference);
         musics.add(newMusic);
@@ -309,6 +313,7 @@ public class VenueHireSystem {
     int cateringCost = 0;
     int musicCost = 0;
 
+    // Find booking using reference
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
         attendees = booking.getAttendees();
@@ -317,11 +322,13 @@ public class VenueHireSystem {
       }
     }
 
+    // If booking not found, return
     if (attendees == null || bookingCode == null) {
       MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
       return;
     }
 
+    // Find hire fee for venue
     for (Venue venue : venues) {
       if (venue.getCode().equals(bookingCode)) {
         int hireFeeInt = Integer.parseInt(venue.getHireFee());
@@ -330,6 +337,7 @@ public class VenueHireSystem {
       }
     }
 
+    // Find catering costs for booking
     for (Catering catering : caterings) {
       if (catering.getReference().equals(bookingReference)) {
         cateringCost = catering.viewInvoice(bookingReference, attendees);
@@ -338,6 +346,7 @@ public class VenueHireSystem {
       }
     }
 
+    // Check for music for booking
     for (Music music : musics) {
       if (music.getReference().equals(bookingReference)) {
         musicCost = music.viewInvoice(bookingReference, attendees);
@@ -345,7 +354,7 @@ public class VenueHireSystem {
         break;
       }
     }
-
+    
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalCost));
   }
 }
