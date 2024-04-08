@@ -6,7 +6,7 @@ import nz.ac.auckland.se281.Types.FloralType;
 
 public class VenueHireSystem {
 
-  String systemDate;
+  private String systemDate;
   private ArrayList<Venue> venues = new ArrayList<>();
   private ArrayList<Booking> bookings = new ArrayList<>();
 
@@ -19,7 +19,7 @@ public class VenueHireSystem {
       MessageCli.NO_VENUES.printMessage();
       return;
     }
-    countVenues(venueCount);
+    displayVenueCount(venueCount);
 
     // Listing venues
     for (Venue venue : venues) {
@@ -79,9 +79,10 @@ public class VenueHireSystem {
     MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
   }
 
-  public void countVenues(int venueCount) {
-
-    switch (venueCount) {
+  public void displayVenueCount(int venueCount) {
+    
+    // Should print the number as a word if less than 10 venues, otherwise print digits
+    switch (venueCount) {  
       case 1:
         MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
         break;
