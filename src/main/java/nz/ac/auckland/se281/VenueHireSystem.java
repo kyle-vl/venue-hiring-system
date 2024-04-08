@@ -300,6 +300,7 @@ public class VenueHireSystem {
 
   public void viewInvoice(String bookingReference) {
     String attendees = null;
+    int cateringCost = 0;
     
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
@@ -314,9 +315,12 @@ public class VenueHireSystem {
 
     for (Catering catering : caterings) {
       if (catering.getReference().equals(bookingReference)) {
-        catering.viewInvoice(bookingReference, attendees);
+        cateringCost = catering.viewInvoice(bookingReference, attendees);
         return;
       }
     }
+
+    int totalCost = cateringCost;
+    MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalCost));
   }
 }
