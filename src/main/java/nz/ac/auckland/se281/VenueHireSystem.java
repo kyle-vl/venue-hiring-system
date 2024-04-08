@@ -80,9 +80,9 @@ public class VenueHireSystem {
   }
 
   public void displayVenueCount(int venueCount) {
-    
+
     // Should print the number as a word if less than 10 venues, otherwise print digits
-    switch (venueCount) {  
+    switch (venueCount) {
       case 1:
         MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
         break;
@@ -159,53 +159,51 @@ public class VenueHireSystem {
       return;
     }
 
-    // Use venue code to find venue name
     boolean venueFound = false;
-    int attendeesFixed = 0;
+    int attendeesAdjusted = 0;
 
+    String[] systemDateParts = systemDate.split("/");
+    int systemDay = Integer.parseInt(systemDateParts[0]);
+    String systemMonth = systemDateParts[1];
+    String systemYear = systemDateParts[2];
+
+    // Use venue code to find venue name
     for (Venue venue : venues) {
       if (venue.getCode().equals(code)) {
         name = venue.getName();
         venueFound = true;
         String capacity = venue.getCapacity();
 
-        /* Note to self: this is very messy and needs a rework!
-        Also needs to check month and year! */
-        String[] systemDateParts = systemDate.split("/");
-        int systemDay = Integer.parseInt(systemDateParts[0]);
-
         String[] bookingDateParts = date.split("/");
         int bookingDay = Integer.parseInt(bookingDateParts[0]);
 
         int nextAvailableDayInt = systemDay;
-
-        while (bookingDay > systemDay) {
+        while (bookingDay + 1 > systemDay) {
           nextAvailableDayInt++;
           systemDay++;
         }
-        nextAvailableDayInt++;
 
+        // Add leading zero if day is one digit
         String nextAvailableDay = String.valueOf(nextAvailableDayInt);
         if (nextAvailableDay.length() == 1) {
           nextAvailableDay = "0" + nextAvailableDay;
         }
-        String nextAvailable =
-            nextAvailableDay + "/" + systemDateParts[1] + "/" + systemDateParts[2];
 
+        String nextAvailable = nextAvailableDay + "/" + systemMonth + "/" + systemYear;
         venue.setNextAvailable(nextAvailable);
 
         // Adjust attendees count if not valid
         capacityInt = Integer.parseInt(venue.getCapacity());
         if (capacityInt / 4 > attendeesInt) {
-          attendeesFixed = capacityInt / 4;
+          attendeesAdjusted = capacityInt / 4;
           String attendeesOld = attendees;
-          attendees = String.valueOf(attendeesFixed);
+          attendees = String.valueOf(attendeesAdjusted);
           MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(attendeesOld, attendees, capacity);
         }
         if (attendeesInt > capacityInt) {
-          attendeesFixed = capacityInt;
+          attendeesAdjusted = capacityInt;
           String attendeesOld = attendees;
-          attendees = String.valueOf(attendeesFixed);
+          attendees = String.valueOf(attendeesAdjusted);
           MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(attendeesOld, attendees, capacity);
         }
         break;
