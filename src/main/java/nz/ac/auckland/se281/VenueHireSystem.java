@@ -10,6 +10,7 @@ public class VenueHireSystem {
   private ArrayList<Venue> venues = new ArrayList<>();
   private ArrayList<Booking> bookings = new ArrayList<>();
   private ArrayList<Catering> caterings = new ArrayList<>();
+  private ArrayList<Music> musics = new ArrayList<>();
 
   public VenueHireSystem() {}
 
@@ -272,9 +273,10 @@ public class VenueHireSystem {
       if (booking.getReference().equals(bookingReference)) {
         String cateringTypeName = cateringType.getName();
         int cateringTypeCost = cateringType.getCostPerPerson();
+
         Catering newCatering = new Catering(bookingReference, cateringTypeName, cateringTypeCost);
-        caterings.add(newCatering);
         newCatering.displayMessage(bookingReference);
+        caterings.add(newCatering);
         return;
         }
       }
@@ -285,8 +287,10 @@ public class VenueHireSystem {
   public void addServiceMusic(String bookingReference) {
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
-        booking.setHasMusic(true);
-        MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Music", bookingReference);
+
+        Music newMusic = new Music(bookingReference);
+        newMusic.displayMessage(bookingReference);
+        musics.add(newMusic);
         return;
       }
     }
@@ -301,6 +305,7 @@ public class VenueHireSystem {
   public void viewInvoice(String bookingReference) {
     String attendees = null;
     int cateringCost = 0;
+    int musicCost = 0;
     
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
@@ -320,7 +325,14 @@ public class VenueHireSystem {
       }
     }
 
-    int totalCost = cateringCost;
+    for (Music music: musics) {
+      if (music.getReference().equals(bookingReference)) {
+        musicCost = music.viewInvoice(bookingReference, attendees);
+        return;
+      }
+    }
+
+    int totalCost = cateringCost + musicCost;
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalCost));
   }
 }
