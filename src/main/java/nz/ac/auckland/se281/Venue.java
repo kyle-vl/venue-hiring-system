@@ -99,20 +99,12 @@ public class Venue {
     int nextAvailableMonthInt = Integer.parseInt(nextAvailableParts[1]);
     int nextAvailableYearInt = Integer.parseInt(nextAvailableParts[2]);
 
-    boolean adjusted = false;
-    
-    if (partyDay == nextAvailableDayInt) {
-      adjusted = true;
+    if (partyDay == nextAvailableDayInt
+        && partyMonth == nextAvailableMonthInt
+        && partyYear == nextAvailableYearInt) {
       nextAvailableDayInt = partyDay + 1;
     }
-    if (partyMonth == nextAvailableMonthInt && adjusted == false) {
-      adjusted = true;
-      nextAvailableMonthInt = partyMonth + 1;
-    }
-    if (partyYear == nextAvailableYearInt && adjusted == false) {
-      nextAvailableYearInt = partyYear + 1;
-    }
-
+    
     // Add leading zero if month or day is one digit
     String nextAvailableDay = String.valueOf(nextAvailableDayInt);
     if (nextAvailableDay.length() == 1) {
