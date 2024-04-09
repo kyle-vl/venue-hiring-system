@@ -9,9 +9,7 @@ public class VenueHireSystem {
   private String systemDate;
   private ArrayList<Venue> venues = new ArrayList<>();
   private ArrayList<Booking> bookings = new ArrayList<>();
-  private ArrayList<Catering> caterings = new ArrayList<>();
-  private ArrayList<Music> musics = new ArrayList<>();
-  private ArrayList<Florist> florists = new ArrayList<>();
+  private ArrayList<Service> services = new ArrayList<>();
 
   public VenueHireSystem() {}
 
@@ -272,7 +270,7 @@ public class VenueHireSystem {
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
     int attendees = 0;
-    
+
     // Find booking using reference
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
@@ -281,12 +279,12 @@ public class VenueHireSystem {
 
         String cateringTypeName = cateringType.getName();
         int cateringTypeCost = cateringType.getCostPerPerson();
-        
+
         int cateringCost = attendees * cateringTypeCost;
 
         Catering newCatering = new Catering(bookingReference, cateringTypeName, cateringCost);
         newCatering.displayMessage(bookingReference);
-        caterings.add(newCatering);
+        services.add(newCatering);
         return;
       }
     }
@@ -301,7 +299,7 @@ public class VenueHireSystem {
         // If booking found, add music
         Music newMusic = new Music(bookingReference);
         newMusic.displayMessage(bookingReference);
-        musics.add(newMusic);
+        services.add(newMusic);
         return;
       }
     }
@@ -319,7 +317,7 @@ public class VenueHireSystem {
 
         Florist newFlorist = new Florist(bookingReference, floristTypeName, floristTypeCost);
         newFlorist.displayMessage(bookingReference);
-        florists.add(newFlorist);
+        services.add(newFlorist);
         return;
       }
     }
@@ -367,30 +365,11 @@ public class VenueHireSystem {
       }
     }
 
-    // Find catering costs for booking
-    for (Catering catering : caterings) {
-      if (catering.getReference().equals(bookingReference)) {
-        catering.viewInvoice();
-        totalCost += catering.getCost();
-        break;
-      }
-    }
-
-    // Check for music for booking
-    for (Music music : musics) {
-      if (music.getReference().equals(bookingReference)) {
-        music.viewInvoice();
-        totalCost += music.getCost();
-        break;
-      }
-    }
-
-    // Find floral costs for booking
-    for (Florist florist : florists) {
-      if (florist.getReference().equals(bookingReference)) {
-        florist.viewInvoice();
-        totalCost += florist.getCost();
-        break;
+    // Print and add to total cost all services attached to reference
+    for (Service service : services) {
+      if (service.getReference().equals(bookingReference)) {
+        service.viewInvoice();
+        totalCost += service.getCost();
       }
     }
 
