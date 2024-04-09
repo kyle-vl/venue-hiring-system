@@ -10,9 +10,7 @@ public class Music extends Service {
     MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Music", bookingReference);
   }
 
-  public int viewInvoice(String bookingReference, String attendees) {
-    final int musicCost = 500;
-    MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(String.valueOf(musicCost));
-    return musicCost;
+  public void viewInvoice() {
+    MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(String.valueOf(cost));
   }
 }

@@ -271,14 +271,20 @@ public class VenueHireSystem {
   }
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
+    int attendees = 0;
+    
     // Find booking using reference
     for (Booking booking : bookings) {
       if (booking.getReference().equals(bookingReference)) {
         // If booking found, add catering chosen by user
+        attendees = Integer.parseInt(booking.getAttendees());
+
         String cateringTypeName = cateringType.getName();
         int cateringTypeCost = cateringType.getCostPerPerson();
+        
+        int cateringCost = attendees * cateringTypeCost;
 
-        Catering newCatering = new Catering(bookingReference, cateringTypeName, cateringTypeCost);
+        Catering newCatering = new Catering(bookingReference, cateringTypeName, cateringCost);
         newCatering.displayMessage(bookingReference);
         caterings.add(newCatering);
         return;
@@ -327,9 +333,6 @@ public class VenueHireSystem {
     String email = null;
     String partyDate = null;
     int totalCost = 0;
-    int cateringCost = 0;
-    int musicCost = 0;
-    int floristCost = 0;
 
     // Find booking using reference
     for (Booking booking : bookings) {
@@ -367,8 +370,8 @@ public class VenueHireSystem {
     // Find catering costs for booking
     for (Catering catering : caterings) {
       if (catering.getReference().equals(bookingReference)) {
-        cateringCost = catering.viewInvoice(bookingReference, attendees);
-        totalCost += cateringCost;
+        catering.viewInvoice();
+        totalCost += catering.getCost();
         break;
       }
     }
@@ -376,8 +379,8 @@ public class VenueHireSystem {
     // Check for music for booking
     for (Music music : musics) {
       if (music.getReference().equals(bookingReference)) {
-        musicCost = music.viewInvoice(bookingReference, attendees);
-        totalCost += musicCost;
+        music.viewInvoice();
+        totalCost += music.getCost();
         break;
       }
     }
@@ -385,8 +388,8 @@ public class VenueHireSystem {
     // Find floral costs for booking
     for (Florist florist : florists) {
       if (florist.getReference().equals(bookingReference)) {
-        floristCost = florist.viewInvoice(bookingReference, attendees);
-        totalCost += floristCost;
+        florist.viewInvoice();
+        totalCost += florist.getCost();
         break;
       }
     }
