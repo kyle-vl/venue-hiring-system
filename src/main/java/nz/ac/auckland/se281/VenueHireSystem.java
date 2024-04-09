@@ -24,12 +24,6 @@ public class VenueHireSystem {
 
     // Listing venues
     for (Venue venue : venues) {
-      
-      // Unbooked venues are today, if system date is set
-      if (venue.getNextAvailable().equals("system date not set") && !systemDate.isEmpty()) {
-        venue.setNextAvailable(systemDate);
-      }
-
       String name = venue.getName();
       String code = venue.getCode();
       String capacity = venue.getCapacity();
@@ -82,7 +76,7 @@ public class VenueHireSystem {
     }
 
     Venue newVenue =
-        new Venue(venueName, venueCode, capacityInput, hireFeeInput, "system date not set");
+        new Venue(venueName, venueCode, capacityInput, hireFeeInput, "SYSTEM DATE NOT SET");
     venues.add(newVenue);
     MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
   }
@@ -127,6 +121,9 @@ public class VenueHireSystem {
   public void setSystemDate(String dateInput) {
     systemDate = dateInput;
     MessageCli.DATE_SET.printMessage(systemDate);
+    for (Venue venue : venues) {
+      venue.adjustNextAvailable(systemDate);
+    }
   }
 
   public void printSystemDate() {
@@ -148,7 +145,6 @@ public class VenueHireSystem {
     // Check system date, venues list, and attendees
     if (systemDate == null || systemDate.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
-      return;
     }
 
     if (venues.size() == 0) {
@@ -157,13 +153,14 @@ public class VenueHireSystem {
     }
 
     boolean venueFound = false;
+    boolean availabilityChanged = false;
     int capacityInt = 0;
     int attendeesAdjusted = 0;
 
     String[] systemDateParts = systemDate.split("/");
     int systemDay = Integer.parseInt(systemDateParts[0]);
-    String systemMonth = systemDateParts[1];
-    String systemYear = systemDateParts[2];
+    int systemMonth = Integer.parseInt(systemDateParts[1]);
+    int systemYear = Integer.parseInt(systemDateParts[2]);
 
     int attendeesInt = Integer.parseInt(attendees);
 
@@ -178,18 +175,24 @@ public class VenueHireSystem {
         int bookingDay = Integer.parseInt(bookingDateParts[0]);
 
         int nextAvailableDayInt = systemDay;
+        int nextAvailableMonthInt = systemMonth;
+
         while (bookingDay + 1 > systemDay) {
           nextAvailableDayInt++;
           systemDay++;
         }
-
         // Add leading zero if day is one digit
         String nextAvailableDay = String.valueOf(nextAvailableDayInt);
         if (nextAvailableDay.length() == 1) {
           nextAvailableDay = "0" + nextAvailableDay;
         }
 
-        String nextAvailable = nextAvailableDay + "/" + systemMonth + "/" + systemYear;
+        String nextAvailableMonth = String.valueOf(nextAvailableMonthInt);
+        if (nextAvailableMonth.length() == 1) {
+          nextAvailableMonth = "0" + nextAvailableMonth;
+        }
+
+        String nextAvailable = nextAvailableDay + "/" + nextAvailableMonth + "/" + systemYear;
         venue.setNextAvailable(nextAvailable);
 
         // Adjust attendees count if not valid

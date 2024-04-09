@@ -38,4 +38,49 @@ public class Venue {
   public void setNextAvailable(String nextAvailable) {
     this.nextAvailable = nextAvailable;
   }
+
+  // This method is called whenever the systemDate is changed
+  public void adjustNextAvailable(String systemDate) {
+    // If the system date has been set for the first time, set all venues to available today
+    if (getNextAvailable().equals("SYSTEM DATE NOT SET")) {
+      setNextAvailable(systemDate);
+      return;
+    }
+
+    String[] systemDateParts = systemDate.split("/");
+    int systemDay = Integer.parseInt(systemDateParts[0]);
+    int systemMonth = Integer.parseInt(systemDateParts[1]);
+    int systemYear = Integer.parseInt(systemDateParts[2]);
+
+    String[] nextAvailableParts = nextAvailable.split("/");
+    int nextAvailableDayInt = Integer.parseInt(nextAvailableParts[0]);
+    int nextAvailableMonthInt = Integer.parseInt(nextAvailableParts[1]);
+    int nextAvailableYearInt = Integer.parseInt(nextAvailableParts[2]);
+
+    boolean adjusted = false;
+    if (systemYear > nextAvailableYearInt) {
+      adjusted = true;
+      nextAvailableYearInt = systemYear;
+    }
+    if (systemMonth > nextAvailableMonthInt && adjusted == false) {
+      adjusted = true;
+      nextAvailableMonthInt = systemMonth;
+    }
+    if (systemDay > nextAvailableDayInt && adjusted == false) {
+      nextAvailableDayInt = systemDay;
+    }
+
+    String nextAvailableDay = String.valueOf(nextAvailableDayInt);
+    if (nextAvailableDay.length() == 1) {
+      nextAvailableDay = "0" + nextAvailableDay;
+    }
+
+    String nextAvailableMonth = String.valueOf(nextAvailableMonthInt);
+    if (nextAvailableMonth.length() == 1) {
+      nextAvailableMonth = "0" + nextAvailableMonth;
+    }
+
+    String nextAvailable = nextAvailableDay + "/" + nextAvailableMonth + "/" + systemYear;
+    setNextAvailable(nextAvailable);
+  }
 }
