@@ -153,14 +153,8 @@ public class VenueHireSystem {
     }
 
     boolean venueFound = false;
-    boolean availabilityChanged = false;
     int capacityInt = 0;
     int attendeesAdjusted = 0;
-
-    String[] systemDateParts = systemDate.split("/");
-    int systemDay = Integer.parseInt(systemDateParts[0]);
-    int systemMonth = Integer.parseInt(systemDateParts[1]);
-    int systemYear = Integer.parseInt(systemDateParts[2]);
 
     int attendeesInt = Integer.parseInt(attendees);
 
@@ -171,30 +165,8 @@ public class VenueHireSystem {
         venueFound = true;
         String capacity = venue.getCapacity();
 
-        String[] bookingDateParts = date.split("/");
-        int bookingDay = Integer.parseInt(bookingDateParts[0]);
-
-        int nextAvailableDayInt = systemDay;
-        int nextAvailableMonthInt = systemMonth;
-
-        while (bookingDay + 1 > systemDay) {
-          nextAvailableDayInt++;
-          systemDay++;
-        }
-        // Add leading zero if day is one digit
-        String nextAvailableDay = String.valueOf(nextAvailableDayInt);
-        if (nextAvailableDay.length() == 1) {
-          nextAvailableDay = "0" + nextAvailableDay;
-        }
-
-        String nextAvailableMonth = String.valueOf(nextAvailableMonthInt);
-        if (nextAvailableMonth.length() == 1) {
-          nextAvailableMonth = "0" + nextAvailableMonth;
-        }
-
-        String nextAvailable = nextAvailableDay + "/" + nextAvailableMonth + "/" + systemYear;
-        venue.setNextAvailable(nextAvailable);
-
+        venue.changeNextAvailable(date);
+       
         // Adjust attendees count if not valid
         capacityInt = Integer.parseInt(venue.getCapacity());
         if (capacityInt / 4 > attendeesInt) {

@@ -70,6 +70,7 @@ public class Venue {
       nextAvailableDayInt = systemDay;
     }
 
+    // Add leading zero if month or day is one digit
     String nextAvailableDay = String.valueOf(nextAvailableDayInt);
     if (nextAvailableDay.length() == 1) {
       nextAvailableDay = "0" + nextAvailableDay;
@@ -80,7 +81,53 @@ public class Venue {
       nextAvailableMonth = "0" + nextAvailableMonth;
     }
 
-    String nextAvailable = nextAvailableDay + "/" + nextAvailableMonth + "/" + systemYear;
+    // Assume year will always be two digits
+    String nextAvailableYear = String.valueOf(nextAvailableYearInt);
+
+    String nextAvailable = nextAvailableDay + "/" + nextAvailableMonth + "/" + nextAvailableYear;
+    setNextAvailable(nextAvailable);
+  }
+
+  public void changeNextAvailable(String partyDate) {
+    String[] partyDateParts = partyDate.split("/");
+    int partyDay = Integer.parseInt(partyDateParts[0]);
+    int partyMonth = Integer.parseInt(partyDateParts[1]);
+    int partyYear = Integer.parseInt(partyDateParts[2]);
+
+    String[] nextAvailableParts = nextAvailable.split("/");
+    int nextAvailableDayInt = Integer.parseInt(nextAvailableParts[0]);
+    int nextAvailableMonthInt = Integer.parseInt(nextAvailableParts[1]);
+    int nextAvailableYearInt = Integer.parseInt(nextAvailableParts[2]);
+
+    boolean adjusted = false;
+    
+    if (partyDay == nextAvailableDayInt) {
+      adjusted = true;
+      nextAvailableDayInt = partyDay + 1;
+    }
+    if (partyMonth == nextAvailableMonthInt && adjusted == false) {
+      adjusted = true;
+      nextAvailableMonthInt = partyMonth + 1;
+    }
+    if (partyYear == nextAvailableYearInt && adjusted == false) {
+      nextAvailableYearInt = partyYear + 1;
+    }
+
+    // Add leading zero if month or day is one digit
+    String nextAvailableDay = String.valueOf(nextAvailableDayInt);
+    if (nextAvailableDay.length() == 1) {
+      nextAvailableDay = "0" + nextAvailableDay;
+    }
+
+    String nextAvailableMonth = String.valueOf(nextAvailableMonthInt);
+    if (nextAvailableMonth.length() == 1) {
+      nextAvailableMonth = "0" + nextAvailableMonth;
+    }
+
+    // Assume year will always be two digits
+    String nextAvailableYear = String.valueOf(nextAvailableYearInt);
+
+    String nextAvailable = nextAvailableDay + "/" + nextAvailableMonth + "/" + nextAvailableYear;
     setNextAvailable(nextAvailable);
   }
 }
