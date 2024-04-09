@@ -24,6 +24,12 @@ public class VenueHireSystem {
 
     // Listing venues
     for (Venue venue : venues) {
+      
+      // Unbooked venues are today, if system date is set
+      if (venue.getNextAvailable().equals("system date not set") && !systemDate.isEmpty()) {
+        venue.setNextAvailable(systemDate);
+      }
+
       String name = venue.getName();
       String code = venue.getCode();
       String capacity = venue.getCapacity();
@@ -75,7 +81,8 @@ public class VenueHireSystem {
       }
     }
 
-    Venue newVenue = new Venue(venueName, venueCode, capacityInput, hireFeeInput, "%s");
+    Venue newVenue =
+        new Venue(venueName, venueCode, capacityInput, hireFeeInput, "system date not set");
     venues.add(newVenue);
     MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
   }
@@ -119,9 +126,6 @@ public class VenueHireSystem {
 
   public void setSystemDate(String dateInput) {
     systemDate = dateInput;
-    for (Venue venue : venues) {
-      venue.setNextAvailable(systemDate);
-    }
     MessageCli.DATE_SET.printMessage(systemDate);
   }
 
@@ -152,22 +156,16 @@ public class VenueHireSystem {
       return;
     }
 
-    int attendeesInt = 0;
-    int capacityInt = 0;
-    try {
-      attendeesInt = Integer.parseInt(attendees);
-    } catch (NumberFormatException nfe) {
-      System.out.println("Booking not made: attendees must be a number.");
-      return;
-    }
-
     boolean venueFound = false;
+    int capacityInt = 0;
     int attendeesAdjusted = 0;
 
     String[] systemDateParts = systemDate.split("/");
     int systemDay = Integer.parseInt(systemDateParts[0]);
     String systemMonth = systemDateParts[1];
     String systemYear = systemDateParts[2];
+
+    int attendeesInt = Integer.parseInt(attendees);
 
     // Use venue code to find venue name
     for (Venue venue : venues) {
