@@ -22,6 +22,8 @@ public class VenueHireSystem {
     }
     displayVenueCount(venueCount);
 
+    adjustNextAvailable();
+
     // Listing venues
     for (Venue venue : venues) {
       String name = venue.getName();
@@ -121,9 +123,6 @@ public class VenueHireSystem {
   public void setSystemDate(String dateInput) {
     systemDate = dateInput;
     MessageCli.DATE_SET.printMessage(systemDate);
-    for (Venue venue : venues) {
-      venue.adjustNextAvailable(systemDate);
-    }
   }
 
   public void printSystemDate() {
@@ -165,8 +164,6 @@ public class VenueHireSystem {
         venueFound = true;
         String capacity = venue.getCapacity();
 
-        venue.changeNextAvailable(date);
-       
         // Adjust attendees count if not valid
         capacityInt = Integer.parseInt(venue.getCapacity());
         if (capacityInt / 4 > attendeesInt) {
@@ -348,5 +345,81 @@ public class VenueHireSystem {
 
     // Print bottom half of invoice, with total cost
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalCost));
+  }
+
+  public void adjustNextAvailable() {
+    // System date must be set to adjust next available dates
+    if (systemDate == null || systemDate.isEmpty()) {
+      return;
+    }
+
+    for (Venue venue : venues) {
+      // If system date has been set for first time, iniitalise next available
+      if (venue.getNextAvailable().equals("SYSTEM DATE NOT SET")) {
+        venue.setNextAvailable(systemDate);
+      } else {
+        String[] nextAvailableDate = venue.getNextAvailable().split("/");
+        String[] systemDateArray = systemDate.split("/");
+
+        int nextAvailableYear = Integer.parseInt(nextAvailableDate[2]);
+        int nextAvailableMonth = Integer.parseInt(nextAvailableDate[1]);
+        int nextAvailableDay = Integer.parseInt(nextAvailableDate[0]);
+
+        int systemYear = Integer.parseInt(systemDateArray[2]);
+        int systemMonth = Integer.parseInt(systemDateArray[1]);
+        int systemDay = Integer.parseInt(systemDateArray[0]);
+
+        // If next available is behind system date, set to system date
+        if (nextAvailableYear < systemYear) {
+          venue.setNextAvailable(systemDate);
+        } else if (nextAvailableYear == systemYear) {
+          if (nextAvailableMonth < systemMonth) {
+            venue.setNextAvailable(systemDate);
+          } else if (nextAvailableMonth == systemMonth) {
+            if (nextAvailableDay < systemDay) {
+              venue.setNextAvailable(systemDate);
+            }
+          }
+        }
+      }
+    }
+
+    // Check bookings and adjust next available date if needed
+    for (Venue venue : venues) {
+      for (Booking booking : bookings) {
+        if (booking.getCode().equals(venue.getCode())) {
+          String[] bookingDate = booking.getDate().split("/");
+          String[] nextAvailableDate = venue.getNextAvailable().split("/");
+
+          int bookingYear = Integer.parseInt(bookingDate[2]);
+          int bookingMonth = Integer.parseInt(bookingDate[1]);
+          int bookingDay = Integer.parseInt(bookingDate[0]);
+
+          int nextAvailableYear = Integer.parseInt(nextAvailableDate[2]);
+          int nextAvailableMonth = Integer.parseInt(nextAvailableDate[1]);
+          int nextAvailableDay = Integer.parseInt(nextAvailableDate[0]);
+
+          // If booking falls on same day, increment next available day
+          if (bookingYear == nextAvailableYear
+              && bookingMonth == nextAvailableMonth
+              && bookingDay == nextAvailableDay) {
+            String nextAvailableDayString = String.valueOf(nextAvailableDay + 1);
+
+            // Add leading zeros if needed for day and month
+            if (nextAvailableDayString.length() == 1) {
+              nextAvailableDayString = "0" + nextAvailableDayString;
+            }
+            String nextAvailableMonthString = String.valueOf(nextAvailableMonth);
+            if (nextAvailableMonthString.length() == 1) {
+              nextAvailableMonthString = "0" + nextAvailableMonthString;
+            }
+
+            // Concatenate strings and set next available
+            venue.setNextAvailable(
+                nextAvailableDayString + "/" + nextAvailableMonthString + "/" + nextAvailableYear);
+          }
+        }
+      }
+    }
   }
 }
