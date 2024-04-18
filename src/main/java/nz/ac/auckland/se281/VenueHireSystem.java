@@ -22,7 +22,11 @@ public class VenueHireSystem {
     }
     displayVenueCount(venueCount);
 
-    adjustNextAvailable();
+    // Adjust method must be run multiple times to correctly set next available dates.
+    // It needs to be run at least once, hence the +1 to ensure the system is up to date.
+    for (int i = 0; i < bookings.size() + 1; i++) {
+      adjustNextAvailable();
+    }
 
     // Listing venues
     for (Venue venue : venues) {
